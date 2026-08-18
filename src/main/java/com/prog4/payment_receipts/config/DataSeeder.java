@@ -11,6 +11,7 @@ import com.prog4.payment_receipts.repository.tag.JpaTagRepository;
 import com.prog4.payment_receipts.repository.user.JpaUserRepository;
 import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -25,15 +26,18 @@ public class DataSeeder implements CommandLineRunner {
     private final JpaCategoryRepository categoryRepository;
     private final JpaTagRepository tagRepository;
     private final JpaPaymentReceiptRepository paymentReceiptRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public DataSeeder(JpaUserRepository userRepository,
                       JpaCategoryRepository categoryRepository,
                       JpaTagRepository tagRepository,
-                      JpaPaymentReceiptRepository paymentReceiptRepository) {
+                      JpaPaymentReceiptRepository paymentReceiptRepository,
+                      PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.tagRepository = tagRepository;
         this.paymentReceiptRepository = paymentReceiptRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -44,13 +48,21 @@ public class DataSeeder implements CommandLineRunner {
 
         Faker faker = new Faker();
 
-        // 1 usuario
+        // usuario con 1234 cmo estaba pero ahora con el password hasheado
         User user = new User();
-        user.setEmail(faker.internet().emailAddress());
-        user.setPassword("1234"); // por ahora no hasheamos ni nada....
+        user.setEmail("user@test.com");
+        user.setPassword(passwordEncoder.encode("1234"));
         user.setRole(Role.USER);
         user.setEnabled(true);
         user = userRepository.save(user);
+
+        // admin apra probar despues
+        User admin = new User();
+        admin.setEmail("admin@test.com");
+        admin.setPassword(passwordEncoder.encode("1234"));
+        admin.setRole(Role.ADMIN);
+        admin.setEnabled(true);
+        userRepository.save(admin);
 
         // creamos una sola categoria
         Category category = new Category();
@@ -71,14 +83,14 @@ public class DataSeeder implements CommandLineRunner {
             receipt.setAmount(BigDecimal.valueOf(faker.number().randomDouble(2, 1000, 50000)));
             receipt.setDate(LocalDate.now().minusDays(faker.number().numberBetween(0, 60)));
             receipt.setDescription(faker.commerce().productName());
-            receipt.setImageLink(null); //pasamos null porque no tenemos imagenes
+            receipt.setImageLink(null);
             receipt.setUser(user);
             receipt.setCategory(category);
             receipt.setTags(List.of(tags.get(i)));
             paymentReceiptRepository.save(receipt);
         }
 
-        System.out.println("Datos de prueba cargados con Datafaker: 1 usuario, 1 categoria, 3 tags, 3 payment receipts.");
+        System.out.println("Datos de prueba cargados: 2 usuarios (user@test.com / admin@test.com, pass: 1234), 1 categoria, 3 tags, 3 payment receipts.");
     }
 
     private Tag saveTag(String name, User user) {
