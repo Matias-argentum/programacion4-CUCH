@@ -1,12 +1,10 @@
 package com.prog4.payment_receipts.service.category;
 
 import com.prog4.payment_receipts.dto.category.CategoryResponseDto;
-import com.prog4.payment_receipts.exception.CategoryNotFoundException;
+import com.prog4.payment_receipts.exception.category.CategoryNotFoundException;
 import com.prog4.payment_receipts.model.category.Category;
 import com.prog4.payment_receipts.repository.category.JpaCategoryRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class CategoryFinderService {
