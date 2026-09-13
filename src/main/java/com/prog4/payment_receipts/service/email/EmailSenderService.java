@@ -3,7 +3,6 @@ package com.prog4.payment_receipts.service.email;
 import com.example.mail.dto.EmailRequestDTO;
 import com.example.mail.dto.EmailResponseDTO;
 import com.example.mail.entity.EmailLog;
-import com.example.mail.repository.EmailLogRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,11 +16,9 @@ import java.util.UUID;
 public class EmailSenderService {
 
     private final JavaMailSender mailSender;
-    private final EmailLogRepository emailLogRepository;
 
-    public EmailSenderService(JavaMailSender mailSender, EmailLogRepository emailLogRepository) {
+    public EmailSenderService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
-        this.emailLogRepository = emailLogRepository;
     }
 
     public EmailResponseDTO sendEmail(EmailRequestDTO request) {
