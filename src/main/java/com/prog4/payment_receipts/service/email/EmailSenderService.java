@@ -1,15 +1,13 @@
 package com.prog4.payment_receipts.service.email;
 
-import com.example.mail.dto.EmailRequestDTO;
-import com.example.mail.dto.EmailResponseDTO;
-import com.example.mail.entity.EmailLog;
+import com.prog4.payment_receipts.dto.email.EmailRequestDTO;
+import com.prog4.payment_receipts.dto.email.EmailResponseDTO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service

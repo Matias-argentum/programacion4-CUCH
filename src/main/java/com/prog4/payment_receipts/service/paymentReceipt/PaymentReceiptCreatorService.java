@@ -23,16 +23,20 @@ public class PaymentReceiptCreatorService {
     private final JpaPaymentReceiptRepository receiptRepository;
     private final JpaCategoryRepository categoryRepository;
     private final JpaTagRepository tagRepository;
+    private final PaymentReceiptEmailSenderService paymentReceiptEmailSenderService;
 
     public PaymentReceiptCreatorService(
             PaymentReceiptFileService fileService,
             JpaPaymentReceiptRepository receiptRepository,
             JpaCategoryRepository categoryRepository,
-            JpaTagRepository tagRepository) {
+            JpaTagRepository tagRepository,
+            PaymentReceiptEmailSenderService paymentReceiptEmailSenderService
+    ) {
         this.fileService = fileService;
         this.receiptRepository = receiptRepository;
         this.categoryRepository = categoryRepository;
         this.tagRepository = tagRepository;
+        this.paymentReceiptEmailSenderService = paymentReceiptEmailSenderService;
     }
 
     public PaymentReceipt create(
@@ -54,15 +58,19 @@ public class PaymentReceiptCreatorService {
 
         List<Tag> tags = tagIds == null ? List.of() : tagRepository.findAllById(tagIds);
 
-        PaymentReceipt receipt = new PaymentReceipt();
-        receipt.setAmount(amount);
-        receipt.setDate(date);
-        receipt.setDescription(description);
-        receipt.setImageLink(nombreObjeto);
-        receipt.setCategory(category);
-        receipt.setTags(tags);
-        receipt.setUser(currentUser);
+        PaymentReceipt newReceipt = new PaymentReceipt();
+        newReceipt.setAmount(amount);
+        newReceipt.setDate(date);
+        newReceipt.setDescription(description);
+        newReceipt.setImageLink(nombreObjeto);
+        newReceipt.setCategory(category);
+        newReceipt.setTags(tags);
+        newReceipt.setUser(currentUser);
 
-        return receiptRepository.save(receipt);
+        PaymentReceipt receipt = receiptRepository.save(newReceipt);
+
+        this.paymentReceiptEmailSenderService.send(receipt);
+
+        return receipt;
     }
 }
