@@ -1,6 +1,5 @@
 package com.prog4.payment_receipts.model.emailTemplate;
-
-package com.prog4.payment_receipts.enum.emailTemplate.EmailTemplateKeysEnum;
+import com.prog4.payment_receipts.enumerated.emailTemplate.EmailTemplateKeysEnum;
 import jakarta.persistence.*;
 
 @Entity

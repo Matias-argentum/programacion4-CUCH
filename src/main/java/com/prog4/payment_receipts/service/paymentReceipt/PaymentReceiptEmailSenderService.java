@@ -1,6 +1,6 @@
 package com.prog4.payment_receipts.service.paymentReceipt;
 
-import com.prog4.payment_receipts.EmailTemplateKeysEnum;
+import com.prog4.payment_receipts.enumerated.emailTemplate.EmailTemplateKeysEnum;
 import com.prog4.payment_receipts.dto.email.EmailRequestDTO;
 import com.prog4.payment_receipts.dto.email.EmailResponseDTO;
 import com.prog4.payment_receipts.model.emailTemplate.EmailTemplate;
